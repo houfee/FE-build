@@ -6,6 +6,9 @@
   "webpack-dev-server": "^3.11.0"
 }
 ```
+
+视频地址： https://www.bilibili.com/video/BV1a4411e7Bz
+
 ## 1. webpack 常见配置
 
 具体包含以下部分：
@@ -359,7 +362,7 @@ module.export = {
 
 
 
-### 2.2 插件介绍
+### 2.2 基本插件
 
 + `webpack-dev-server`
 + `html-webpack-plugin`
@@ -371,8 +374,181 @@ module.export = {
 
 
 
+## 3.webpack优化
+
++ 优化打包速度——HMR
+
+```js
+  devServer: {
+    hot: true,
+  },
+ 		new Webpack.NamedModulesPlugin(), // 打印热更新插件路径
+    new Webpack.HotModuleReplacementPlugin() // 热更新插件
+```
 
 
 
++ 优化代码调试——sourceMap
++ oneof——use规则配置
++ babel缓存 和 文件资源缓存
+
+```bash
+# babel缓存
+cacheDirectory: true, // babel 缓存
+
+# 文件资源缓存
+hash：每次webpack构建时会生成一个唯一的值
+问题：因为js和css同时使用一个hash值
+如果重新打包，会导致所有的缓存失效（这时重新打包我就可能只更改一个文件，却引起全部文件更新）
+
+chunkhash： 根据chunk生成hash值。如果打包来远同一个chunk，那么hash值就一样
+问题：js个css的hash值是一样的
+因为css是在js中被引入的，同属于一个chunk
+
+contenthash：根据文件的内容生成hash值。不同文件hash值一定不一样
+```
+
++ tree shaking
+
+```js
+// 前提 1. ES6模块化   2.开启production环境
+
+// 在 package.json中配置
+"sideEffects": false // 所有代码都没有副作用，都可以进行 treeshaking，问题会把 css/@babel/polyfill 干掉
+"sideEffects": [".css"] // 排除css文件，不 tree shaking
+```
 
 
+
++ code split
+
+```js
+// 方法一：多入口
+
+// 方法二：
+// 可以将node_modules中的代码单独打包一个chunk最终输出
+// 自动分析多入口chunk中，有没有公共文件，如果有会打包成单独一个chunk
+```
+
++ 懒加载和预加载
+
+```js
+// 懒加载 webpackChunkName: 'tset'
+// 预加载 webpackPreFetch: 'true'
+import(/* webpackChunkName: 'tset', webpackPreFetch: 'true' */ './test.js').then(({ /* 结构解析 */}) => {
+  // ... 
+})
+
+```
+
++ pwa
+
+```js
+// pwa: 渐进式网络开发应用程序（离线访问）
+// npm i workbox-webpack-plugin -D
+
+// webpack.config.js
+new WorkboxWebpackPlugin.GenerateSW({
+  // 生成一个 serviceWorker 文件，需要在入口文件做配置
+  clientsClaim: true, // 帮助serviceWorker快速启动
+  skipWaiting: true // 删除旧的 serviceWorker
+}),
+  
+// src/index.js 
+// 注册serviceWorker
+
+// 判断serviceWorker兼容性
+/* 注意！！！
+1.eslint 不认识 window navigator 等变量
+需要在package.json中配置
+  "eslintConfig": {
+    "extends": "airbnb-base",
+    "env": {
+      "browser": true // 支持浏览器端全局访问
+    }
+  },
+
+2. /build 必须运行在 服务端
+*/
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker
+      .register('/service-worker.js')
+      .then(() => {
+        console.log('ok');
+      })
+      .catch(() => {
+        console.log('error');
+      });
+  });
+}
+```
+
++ 多进程打包
+
+```js
+// npm i thread-loader -D //  开启多进程打包，开启线程也有600ms的消耗
+use: [
+  {
+    loader: 'thread-loader',
+    options: {
+      workers: 2
+    }
+  },
+]
+```
+
++ externals——防止将一些npm包打包到项目中
++ dll——动态连接库——对某些第三方库进行单独打包
+
+**测试将vue打包成动态连接库**
+
+```js
+// 第一步
+// webpack.dll.js
+const { resolve } = require('path')
+const webpack = require('webpack')
+module.exports = {
+  entry: {
+    vue: ['vue']
+  },
+  output: {
+    filename: '[name].js',
+    path: resolve(__dirname, 'dll'),
+    library: '[name]_[hash:10]'
+  },
+  plugins: [
+    new webpack.DllPlugin({
+      name: '[name]_[hash:10]',
+      path: resolve(__dirname, 'dll/manifest.json')
+    })
+  ],
+  mode: "production"
+}
+ 
+// 执行 npx webpack --config webpack.dll.js 
+// 生成 dll/vue.js dll/manifest.json 文件
+```
+
+
+```js
+// 第二步
+// webpack.config.js
+// npm i add-asset-html-webpack-plugin -D
+
+const AddAssetAtmlWebpackPlugin = require('add-asset-html-webpack-plugin')
+
+// .... plugins 添加一下 new ...
+new Webpack.ProvidePlugin({ // 通过Webpack自带方法，为每个模块注入 vue 对象
+  vue: "vue"
+}),
+new webpack.DllReferencePlugin({ // 告诉 webpack 那些库不参与打包，同时使用时的名称也得变
+  manifest: path.resolve(__dirname, 'dll/manifest.json')
+}),
+// 将某个文件打包输出出去，并在html文件中引入它
+new AddAssetAtmlWebpackPlugin({
+  filepath: path.resolve(__dirname, 'dll/vue.js')
+}),
+  
+// 执行 npm run build 
+```
