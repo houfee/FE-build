@@ -1,0 +1,25 @@
+{
+  "name": "test-pack",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bin": {
+    "zf-pack": "./bin/zf-pack.js"
+  },
+  "dependencies": {
+    "@babel/generator": "^7.7.7",
+    "@babel/traverse": "^7.7.4",
+    "@babel/types": "^7.7.4",
+    "babylon": "^6.18.0",
+    "ejs": "^3.0.1"
+  },
+  "devDependencies": {
+    "tapable": "^1.1.3"
+  }
+}

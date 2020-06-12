@@ -1,0 +1,16 @@
+{
+  "parserOptions": {
+      "ecmaVersion": 11,
+      "sourceType": "module",
+      "ecmaFeatures": {
+          "globalReturn": true
+      }
+  },
+  "rules": {
+  },
+  "env": {
+      "node": true,
+      "commonjs": true,
+      "es6": true
+  }
+}
