@@ -1,16 +1,14 @@
 import './less/index.less'
 import './test'
 // import 'bootstrap' // 这里引入的是别名
-
-
+console.log()
 // 测试 css
 import pic from './img/4.png'
 let image = new Image()
 image.src = pic
 document.body.appendChild(image) 
 
-console.log(vue)
-console.log($)
+console.log($('#btn'), vue)
 console.log(process.env.NODE_ENV)
 console.log('DefinePlugin定义环境变量：', FLAG)
 

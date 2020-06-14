@@ -23,7 +23,7 @@ module.exports = {
   mode: 'development', // development production
   entry: path.join(__dirname, './src/index.js'),
   output: {
-    filename: path.posix.join('static', 'js/[name].[contenthash:10].js'),
+    filename: path.posix.join('static', 'js/[name].[hash:10].js'),
     path: path.join(__dirname, './build')
   },
   devServer: {
