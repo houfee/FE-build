@@ -1,5 +1,5 @@
 {
-  "name": "06-my-webpack",
+  "name": "03-tapable",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -10,8 +10,6 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "less": "^3.10.3",
-    "webpack": "^4.41.5",
-    "webpack-cli": "^3.3.10"
+    "tapable": "^1.1.3"
   }
 }

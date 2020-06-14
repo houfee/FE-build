@@ -1,6 +1,6 @@
-
-
 ## 5 Tapable
+
+[视频地址](https://www.bilibili.com/video/BV1a4411e7Bz?p=28)
 
 ### 5.1 介绍
 
@@ -22,7 +22,7 @@ const {
  } = require("tapable");
 ```
 
-+ tapable库中有三种注册方法
++ `tapable`库中有三种注册方法
 
 ```js
 tap // 同步方法
@@ -723,12 +723,9 @@ hook.callAsync('houfei', () => {
 
 ```
 
-
-
 ## 6 手写Webpack
 
 详见 `06-my-webpack` 文件 以及 (视频)[https://www.bilibili.com/video/av51693431?p=33]
-
 
 ## 7 loader
 
@@ -741,6 +738,7 @@ hook.callAsync('houfei', () => {
 ![20200103172455](assets/20200103172455.png)
 
 ### 7.2 loader 的特点
+
 + 每一个loader要返回js脚本
 + 每一个loader只做一件内容，为了使loader在更多场景链式调用
 + 每一个loader都是一个模块
@@ -1021,8 +1019,6 @@ img.src = pic
 document.body.appendChild(img)
 ```
 
-
-
 ## 10 style-loader css-loader less-loader
 
 ```js
@@ -1054,8 +1050,6 @@ module.exports = loader
 
 ```
 
-
-
 ```js
 // css-loader
 function loader(source) {
@@ -1080,8 +1074,6 @@ function loader(source) {
 module.exports = loader
 ```
 
-
-
 ```js
 // less-loader
 const less = require('less')
@@ -1095,8 +1087,6 @@ function loader(source) {
 module.exports = loader
 ```
 
-
-
 ```js
 // webpack.config.js
 rules: [
@@ -1105,8 +1095,6 @@ rules: [
     use: ['style-loader', 'css-loader', 'less-loader']
   }
 ```
-
-
 
 ## 11 my-webpack-plugin
 
@@ -1130,8 +1118,6 @@ module.exports = {
 
 ```
 
-
-
 ### 11.1 同步的插件
 
 ```js
@@ -1147,8 +1133,6 @@ class DonePlugin {
 
 module.exports = DonePlugin
 ```
-
-
 
 ### 11.2 异步的插件
 
@@ -1176,8 +1160,6 @@ class AsyncPlugin {
 
 module.exports = AsyncPlugin
 ```
-
-
 
 ### 11.3 文件列表插件
 
@@ -1212,8 +1194,6 @@ class FileListPlugin {
 module.exports = FileListPlugin
 ```
 
-
-
 ```js
 // webpack.config.js
 const path = require('path')
@@ -1237,7 +1217,6 @@ module.exports = {
 }
 
 ```
-
 
 ## 12 内联webopack插件
 
