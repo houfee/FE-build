@@ -6,6 +6,7 @@ const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const TerserJSPlugin = require('terser-webpack-plugin')
 const Webpack = require('webpack')
 
+const TerserWebpackPlugin = require('terser-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const WorkboxWebpackPlugin = require('workbox-webpack-plugin')
@@ -68,6 +69,9 @@ module.exports = {
           reuseExistingChunk: true
         }
       }
+    },
+    runtimeChunk: {
+      name: enyrtpoint => `runtime-${enyrtpoint.name}`
     },
     minimize: true,
     minimizer: [ // 只会在 production 生效
