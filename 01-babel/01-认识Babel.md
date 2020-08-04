@@ -18,7 +18,7 @@
 
 **Babel is a JavaScript compiler.**——顾名思义，`Babel` 就是将最新的 `ES6+` 语法，向后兼容，编译转化为支持各个浏览器可以运行的 `javascript` 代码。
 
-### `Babel` 
+### `Babel`
 
 `babel`编译经历三个阶段：解析(`parse)`，转换(`transform`)，生成(`generate`)。
 
